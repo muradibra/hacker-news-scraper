@@ -4,7 +4,6 @@ Main application entry point for Hacker News scraper
 """
 
 import time
-import schedule
 from config import SCRAPING_CONFIG
 from db import create_table, insert_items
 from scraper import parse_page
@@ -45,26 +44,5 @@ def scrape_all_pages():
         print(f"Error during scraping: {e}")
 
 
-def run_scheduler():
-    """
-    Run the scheduled scraping job
-    """
-    print("Starting Hacker News scraper...")
-    print(
-        f"Scheduled to run every {SCRAPING_CONFIG['scrape_interval_minutes']} minutes")
-
-    # Schedule scraping
-    schedule.every(SCRAPING_CONFIG['scrape_interval_minutes']).minutes.do(
-        scrape_all_pages)
-
-    # Run once immediately
-    scrape_all_pages()
-
-    # Keep running scheduled jobs
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-
 if __name__ == '__main__':
-    run_scheduler()
+    scrape_all_pages()
